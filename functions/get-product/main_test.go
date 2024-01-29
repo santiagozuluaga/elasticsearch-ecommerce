@@ -14,6 +14,6 @@ func TestHandler(t *testing.T) {
 	request := &events.APIGatewayProxyRequest{}
 
 	response, err := apiGatewayHandler(context.Background(), request)
-	c.Error(err)
+	c.NoError(err)
 	c.NotNil(response)
 }
