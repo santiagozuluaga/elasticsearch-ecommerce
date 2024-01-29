@@ -1,0 +1,22 @@
+name: Run unit tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Get latest Go version
+      id: go-latest-version
+      run: |
+        latest_version=$(curl -s https://golang.org/dl/?mode=json | jq -r '.[0].version')
+        echo "Latest Go version is $latest_version"
+        echo "::set-output name=version::$latest_version"
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ steps.go-latest-version.outputs.version }}
+    - name: Run tests
+      run: find . -type d -name "*_test.go" -execdir go test -v \;
